@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class MudarDePagina {
+class mudarDePagina {
   static void trocarTela(BuildContext context, Widget tela) {
     Navigator.push(
       context,

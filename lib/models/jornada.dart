@@ -33,14 +33,14 @@ class Jornada {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
-    data['quilometragemId'] = this.quilometragemId;
+    data['quilometragemId'] = quilometragemId;
     data['jornadaData'] = jornadaData?.toIso8601String();
-    data['jornadaHora'] = this.jornadaHora;
-    data['motoristaID'] = this.motoristaID;
-    data['displayName'] = this.displayName;
-    data['telefone'] = this.telefone;
-    data['placa'] = this.placa;
-    data['km'] = this.km;
+    data['jornadaHora'] = jornadaHora;
+    data['motoristaID'] = motoristaID;
+    data['displayName'] = displayName;
+    data['telefone'] = telefone;
+    data['placa'] = placa;
+    data['km'] = km;
     return data;
   }
 }

@@ -1,13 +1,22 @@
 import 'package:alex/config/mudarDePagina.dart';
 import 'package:alex/repository/api.dart';
-import 'package:alex/views/dash.dart';
+import 'package:alex/views/view_admin.dart';
+import 'package:alex/views/view_motorista.dart';
 import 'package:flutter/material.dart';
 
-class Login extends StatelessWidget {
-  Login({Key? key}) : super(key: key);
+class Login extends StatefulWidget {
+  Login({super.key});
 
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
   final TextEditingController loginController = TextEditingController();
+
   final TextEditingController senhaController = TextEditingController();
+
+  late var isAdm = false;
 
   @override
   Widget build(BuildContext context) {
@@ -20,21 +29,22 @@ class Login extends StatelessWidget {
             children: <Widget>[
               TextField(
                 controller: loginController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "E-mail",
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextField(
                 controller: senhaController,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Senha",
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 20),
+
+              const SizedBox(height: 20),
               OutlinedButton(
                 onPressed: () async {
                   /*String login = loginController.text.trim();
@@ -45,7 +55,7 @@ class Login extends StatelessWidget {
 
                   if (login.isEmpty || senha.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
+                      const SnackBar(
                         content: Text(
                           "Preencha todos os campos",
                         ),
@@ -54,19 +64,20 @@ class Login extends StatelessWidget {
                     return;
                   }
 
-                  var motorista = await Api.getMotorista(login, senha);
+                  var motorista = await Api.logarUsuario(login, senha);
                   if (motorista != null) {
-                    MudarDePagina.logIn(
-                      context,
-                      MyHomePage(motorista: motorista),
+
+                    motorista.isAdim == true
+                        ?  mudarDePagina.logIn( context, ViewAdmin(motorista: motorista),)
+                        :  mudarDePagina.logIn( context, ViewMotorista(motorista: motorista),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Usuário ou senha incorretos")),
+                      const SnackBar(content: Text("Usuário ou senha incorretos")),
                     );
                   }
                 },
-                child: Text("Entrar"),
+                child: const Text("Entrar"),
               ),
             ],
           ),
