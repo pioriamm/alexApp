@@ -53,8 +53,8 @@
 39-->[androidx.core:core:1.13.1] C:\Users\Marcelo\.gradle\caches\transforms-3\6f9a65baaf12c9cf4e60f5516557d16b\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
 40        android:debuggable="true"
 41        android:extractNativeLibs="true"
-42        android:icon="@mipmap/ic_launcher"
-43        android:label="alex" >
+42        android:icon="@mipmap/launcher_icon"
+43        android:label="Entrega+" >
 44        <activity
 45            android:name="br.com.pioriam.alex.MainActivity"
 46            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
