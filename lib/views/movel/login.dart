@@ -135,13 +135,19 @@ class _LoginState extends State<Login> {
     String login = loginController.text.trim();
     String senha = senhaController.text.trim();
 
-    // Apenas para teste fixo:
-    login = "marcelo@novohorizonte.com.br";
-    senha = "123";
-
     if (login.isEmpty || senha.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Preencha todos os campos")),
+      _messengerKey.currentState?.showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.amber,
+          content: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: const Text(
+              "Preencha todos os campos",
+              textAlign: TextAlign.center,
+            ),
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
       );
       return;
     }
@@ -172,8 +178,18 @@ class _LoginState extends State<Login> {
             : MudarDePagina.logIn(context, ViewMotorista(motorista: motorista));
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Usuário ou senha incorretos")),
+      _messengerKey.currentState?.showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: const Text(
+              "Usuário ou senha incorretos",
+              textAlign: TextAlign.center,
+            ),
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
       );
     }
   }
