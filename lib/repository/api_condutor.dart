@@ -1,15 +1,11 @@
 import 'dart:convert';
 
 import 'package:alex/config/configuracao.dart';
-import 'package:alex/models/jornada.dart';
 import 'package:alex/models/motorista.dart';
-import 'package:alex/models/motoristaDto.dart';
 import 'package:http/http.dart' as http;
 
 abstract class ApiCondutor {
-
-
-  static Future<List<MotoristaDTO>> buscarTodosCondutores() async {
+  static Future<List<Motorista>> buscarTodosCondutores() async {
     try {
       var url = Uri.parse(Configuracao.isPRD
           ? '${Configuracao.uri_PRD}/listarCondutor'
@@ -18,8 +14,8 @@ abstract class ApiCondutor {
 
       if (response.statusCode == 200) {
         var decodedResponse =
-        jsonDecode(utf8.decode(response.bodyBytes)) as List;
-        return decodedResponse.map((item) => MotoristaDTO.fromJson(item)).toList();
+            jsonDecode(utf8.decode(response.bodyBytes)) as List;
+        return decodedResponse.map((item) => Motorista.fromJson(item)).toList();
       } else {
         return [];
       }
@@ -57,4 +53,30 @@ abstract class ApiCondutor {
     }
   }
 
+  static Future<bool> editarCondutor({required Motorista motorista}) async {
+    try {
+      var url = Uri.parse(
+        Configuracao.isPRD
+            ? '${Configuracao.uri_PRD}/atualizarCondutor'
+            : '${Configuracao.uri_QAS}/atualizarCondutor',
+      );
+
+      var response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(motorista),
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print("Erro na API: $e");
+      return false;
+    }
+  }
 }

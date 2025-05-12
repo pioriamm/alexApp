@@ -1,9 +1,10 @@
-import 'package:alex/models/motoristaDto.dart';
-import 'package:alex/repository/api_condutor.dart';
 import 'package:alex/repository/api_jornada.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+
+import '../../../models/motorista.dart';
+import '../../../repository/api_condutor.dart';
 
 class CadastrarJornada extends StatefulWidget {
   const CadastrarJornada({super.key});
@@ -14,8 +15,8 @@ class CadastrarJornada extends StatefulWidget {
 
 class _CadastrarJornadaState extends State<CadastrarJornada> {
   final _formKey = GlobalKey<FormState>();
-  MotoristaDTO? _selectedCondutor;
-  List<MotoristaDTO> _condutores = [];
+  Motorista? _selectedCondutor;
+  List<Motorista> _condutores = [];
 
   final _dataController = TextEditingController();
   final _placaController = TextEditingController();
@@ -37,7 +38,7 @@ class _CadastrarJornadaState extends State<CadastrarJornada> {
     final condutores = await ApiCondutor.buscarTodosCondutores();
     setState(() {
       _condutores = condutores
-        ..sort((a, b) => a.displayName.compareTo(b.displayName));
+        ..sort((a, b) => a.displayName!.compareTo(b.displayName!));
     });
   }
 
@@ -175,13 +176,13 @@ class _CadastrarJornadaState extends State<CadastrarJornada> {
   }
 
   Widget _buildDropdownCondutor() {
-    return DropdownButtonFormField<MotoristaDTO>(
+    return DropdownButtonFormField<Motorista>(
       decoration: _inputDecoration('Condutor'),
       value: _selectedCondutor,
       items: _condutores.map((condutor) {
         return DropdownMenuItem(
           value: condutor,
-          child: Text(condutor.displayName),
+          child: Text(condutor.displayName!),
         );
       }).toList(),
       onChanged: (value) {

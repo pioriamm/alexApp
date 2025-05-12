@@ -7,7 +7,6 @@ import '../../../config/mudarDePagina.dart';
 import '../../../controlls/premiacao.dart';
 import '../../../helps/formatadores.dart';
 import '../../../models/jornada.dart';
-import '../../../models/motoristaDto.dart';
 import '../../../repository/api_condutor.dart';
 import '../login.dart';
 import 'cadastrar_condutor.dart';
@@ -24,8 +23,8 @@ class ViewAdmin extends StatefulWidget {
 
 class _ViewAdminState extends State<ViewAdmin> {
   List<Jornada> listaJornadas = [];
-  List<MotoristaDTO> _condutores = [];
-  MotoristaDTO? _selectedCondutor;
+  List<Motorista> _condutores = [];
+  Motorista? _selectedCondutor;
   double valoKm = 0.0;
   var hoje = DateTime.now();
   double valorPremio = 0.0;
@@ -42,7 +41,7 @@ class _ViewAdminState extends State<ViewAdmin> {
     final condutores = await ApiCondutor.buscarTodosCondutores();
     setState(() {
       _condutores = condutores
-        ..sort((a, b) => a.displayName.compareTo(b.displayName));
+        ..sort((a, b) => a.displayName!.compareTo(b.displayName!));
     });
   }
 
@@ -148,12 +147,12 @@ class _ViewAdminState extends State<ViewAdmin> {
   }
 
   Widget _buildDropdownCondutores() {
-    return DropdownButtonFormField<MotoristaDTO>(
+    return DropdownButtonFormField<Motorista>(
       decoration: _inputDecoration('Selecione o Condutor'),
       value: _selectedCondutor,
       items: _condutores
           .map((condutor) => DropdownMenuItem(
-              value: condutor, child: Text(condutor.displayName)))
+              value: condutor, child: Text(condutor.displayName!)))
           .toList(),
       onChanged: (value) {
         if (value != null) {
@@ -161,7 +160,7 @@ class _ViewAdminState extends State<ViewAdmin> {
             isLoading = true;
             _selectedCondutor = value;
           });
-          _carregarJornadas(value.motoristaID);
+          _carregarJornadas(value.motoristaID!);
         }
       },
       validator: (value) => value == null ? 'Selecione um condutor' : null,

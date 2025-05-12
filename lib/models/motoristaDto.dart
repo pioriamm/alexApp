@@ -1,14 +1,14 @@
-class MotoristaDTO {
+class MotoristaDTOs {
   final String displayName;
   final String motoristaID;
 
-  MotoristaDTO({
+  MotoristaDTOs({
     required this.displayName,
     required this.motoristaID,
   });
 
-  factory MotoristaDTO.fromJson(Map<String, dynamic> json) {
-    return MotoristaDTO(
+  factory MotoristaDTOs.fromJson(Map<String, dynamic> json) {
+    return MotoristaDTOs(
       displayName: json['displayName'] ?? '',
       motoristaID: json['motoristaID'] ?? '',
     );
