@@ -1,13 +1,12 @@
 class Premiacao {
   static (int, double) faixaJornada(km) {
-    if (km >= 6.500) {
-      return (1, 1900.00);
-    } else if (km > 5.501 && km <= 5.500) {
-      return (2, 1200.00);
-    } else if (km > 4.501 && km <= 5.500) {
-      return (3, 700.00);
-    } else if (km > 3.500 && km <= 4.500) {
-      return (4, 300.00);
+    if (km >= 8.501) {
+      return (1, 2500.00);
+    } else if (km > 7.501 && km <= 8.500) {
+      return (2, 1900.00);
+    } else if (km > 6.501 && km <= 7.500) {
+      return (3, 1300.00);
+
     }
     return (0, 0.0);
   }

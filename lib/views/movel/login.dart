@@ -1,4 +1,4 @@
-import 'package:alex/config/mudarDePagina.dart';
+import 'package:alex/helps/mudarDePagina.dart';
 import 'package:alex/repository/api_autenticao.dart';
 import 'package:alex/views/movel/adm/view_admin.dart';
 import 'package:alex/views/movel/view_motorista.dart';

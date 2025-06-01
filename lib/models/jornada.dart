@@ -1,7 +1,7 @@
 class Jornada {
-  String? quilometragemId;
+  String? id;
   DateTime? jornadaData;
-  String? jornadaHora;
+  String? jornadaLocalidade;
   String? motoristaID;
   String? displayName;
   String? telefone;
@@ -9,9 +9,9 @@ class Jornada {
   double? km;
 
   Jornada(
-      {this.quilometragemId,
+      {this.id,
       this.jornadaData,
-      this.jornadaHora,
+      this.jornadaLocalidade,
       this.motoristaID,
       this.displayName,
       this.telefone,
@@ -19,11 +19,11 @@ class Jornada {
       this.km});
 
   Jornada.fromJson(Map<String, dynamic> json) {
-    quilometragemId = json['quilometragemId'];
+    id = json['id'];
     jornadaData = json['jornadaData'] != null
         ? DateTime.tryParse(json['jornadaData'])
         : null;
-    jornadaHora = json['jornadaHora'];
+    jornadaLocalidade = json['jornadaLocalidade'];
     motoristaID = json['motoristaID'];
     displayName = json['displayName'];
     telefone = json['telefone'];
@@ -33,9 +33,9 @@ class Jornada {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
-    data['quilometragemId'] = quilometragemId;
+    data['id'] = id;
     data['jornadaData'] = jornadaData?.toIso8601String();
-    data['jornadaHora'] = jornadaHora;
+    data['jornadaLocalidade'] = jornadaLocalidade;
     data['motoristaID'] = motoristaID;
     data['displayName'] = displayName;
     data['telefone'] = telefone;

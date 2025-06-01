@@ -4,9 +4,8 @@ import 'package:alex/models/motorista.dart';
 import 'package:alex/views/movel/login.dart';
 import 'package:flutter/material.dart';
 
-import '../../config/mudarDePagina.dart';
 import '../../controlls/premiacao.dart';
-import '../../repository/api_auditor.dart';
+import '../../helps/mudarDePagina.dart';
 import '../../repository/api_jornada.dart';
 
 class ViewMotorista extends StatefulWidget {
@@ -27,27 +26,65 @@ class _ViewMotoristaState extends State<ViewMotorista> {
   double produtividade = 0.0;
   late DateTime ultimaApuracao;
   final hoje = DateTime.now();
+  final ScrollController _scrollController = ScrollController();
+
+  void _onScroll() {
+    double offset = _scrollController.offset;
+    if (offset == 0) {
+      carregarJornadasNaoAuditadas();
+    } else if (offset == 342) {
+      carregarJornadasAuditadas();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    ultimaApuracao = _hojeMaiorVinte(hoje);
-    carregarJornadas();
+    ultimaApuracao = _hojemenosUm(hoje);
+    _scrollController.addListener(_onScroll);
+    carregarJornadasNaoAuditadas();
   }
 
-  Future<void> carregarJornadas() async {
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<void> carregarJornadasAuditadas() async {
     setState(() => isLoading = true);
     try {
-      final jornadas =
-          await ApiJornada.buscarJornadasPorMotoristaIdNaoAuditadas(
+      final jornadas = await ApiJornada.buscarJornadasPorMotoristaId(
+        dataInicial: _hojeMenosDois(ultimaApuracao),
+        dataFinal: ultimaApuracao,
+        motoristaID: widget.motorista.Id!,
+      );
+      double novoValorKm =
+          jornadas.fold(0.0, (soma, x) => soma + (x.km ?? 0.0));
+
+      setState(() {
+        listaJornadas = jornadas;
+        valorKm = novoValorKm;
+        valorPremio = Premiacao.valorTotalPremio(valorKm);
+        jornada = Premiacao.faixaJornada(valorKm).$2;
+        seguranca = Premiacao.faixaSeguranca(valorKm).$2;
+        produtividade = Premiacao.faixaProdutividade(valorKm).$2;
+      });
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
+
+  Future<void> carregarJornadasNaoAuditadas() async {
+    setState(() => isLoading = true);
+    try {
+      final jornadas = await ApiJornada.buscarJornadasPorMotoristaId(
         dataInicial: ultimaApuracao,
         dataFinal: hoje,
-        motoristaID: widget.motorista.motoristaID!,
+        motoristaID: widget.motorista.Id!,
       );
-      final novoValorKm = await ApiAuditor.auditoriaKm(
-        ultimaApuracao,
-        widget.motorista.motoristaID!,
-      );
+      double novoValorKm =
+          jornadas.fold(0.0, (soma, x) => soma + (x.km ?? 0.0));
 
       setState(() {
         listaJornadas = jornadas;
@@ -68,14 +105,46 @@ class _ViewMotoristaState extends State<ViewMotorista> {
       backgroundColor: Colors.grey[100],
       body: SafeArea(
         child: RefreshIndicator(
-          onRefresh: carregarJornadas,
+          onRefresh: carregarJornadasAuditadas,
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
               children: [
                 _buildBemVindo(),
-                _buildSaldoPremiacao(),
-                _buildQuickActions(),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.45,
+                  child: ListView(
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    controller: _scrollController,
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    children: [
+                      SizedBox(
+                        width: 350,
+                        child: Column(
+                          children: [
+                            _buildSaldoPremiacao(resumo: true),
+                            const SizedBox(width: 8),
+                            _buildQuickActions(),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      SizedBox(
+                        width: 350,
+                        child: Column(
+                          children: [
+                            _buildSaldoPremiacao(resumo: false),
+                            const SizedBox(width: 8),
+                            _buildQuickActions(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 _buildRecentTransactions(),
               ],
             ),
@@ -120,9 +189,9 @@ class _ViewMotoristaState extends State<ViewMotorista> {
         ],
       );
 
-  Widget _buildSaldoPremiacao() => _buildCard(
+  Widget _buildSaldoPremiacao({required bool resumo}) => _buildCard(
         padding: const EdgeInsets.all(20),
-        color: Colors.deepPurple,
+        color: resumo ? Colors.black38 : Colors.deepPurple,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -135,8 +204,11 @@ class _ViewMotoristaState extends State<ViewMotorista> {
                   fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 5),
-            const Text("Saldo Atual",
-                style: TextStyle(color: Colors.white70, fontSize: 16)),
+            resumo
+                ? const Text("Saldo em Aberto",
+                    style: TextStyle(color: Colors.white70, fontSize: 16))
+                : const Text("Saldo Auditado",
+                    style: TextStyle(color: Colors.white70, fontSize: 16)),
             const SizedBox(height: 25),
           ],
         ),
@@ -147,12 +219,12 @@ class _ViewMotoristaState extends State<ViewMotorista> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildActionItem(Icons.fire_truck_rounded, "Jornada",
-                '${Formatador.dinheiro.format(jornada)}'),
-            _buildActionItem(Icons.security, "Segurança",
-                '${Formatador.dinheiro.format(seguranca)}'),
-            _buildActionItem(Icons.flash_on, "Produtividade",
-                '${Formatador.dinheiro.format(produtividade)}'),
+            _buildActionItem(Icons.fire_truck_outlined, "Produtividade",
+                Formatador.dinheiro.format(produtividade)),
+            _buildActionItem(
+                Icons.schedule, "Jornada", Formatador.dinheiro.format(jornada)),
+            _buildActionItem(Icons.speed, "Segurança",
+                Formatador.dinheiro.format(seguranca)),
           ],
         ),
       );
@@ -213,13 +285,19 @@ class _ViewMotoristaState extends State<ViewMotorista> {
   Widget _buildCard(
           {required Widget child, Color? color, EdgeInsets? padding}) =>
       Container(
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(10.0),
+        ),
         width: double.infinity,
         padding: padding,
-        color: color,
         child: child,
       );
 
-  DateTime _hojeMaiorVinte(DateTime hoje) => hoje.day > 20
+  DateTime _hojemenosUm(DateTime hoje) => hoje.day > 20
       ? DateTime(hoje.year, hoje.month, 20)
       : DateTime(hoje.year, hoje.month - 1, 20);
+
+  DateTime _hojeMenosDois(DateTime hoje) =>
+      hoje.day == 20 ? DateTime(hoje.year, hoje.month - 1, 20) : hoje;
 }

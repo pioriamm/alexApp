@@ -1,13 +1,6 @@
-import 'dart:convert';
-
-import 'package:alex/config/configuracao.dart';
-import 'package:alex/models/jornada.dart';
-import 'package:alex/models/motorista.dart';
-import 'package:alex/models/motoristaDto.dart';
-import 'package:http/http.dart' as http;
-
 abstract class ApiAuditor {
-  static Future<double> auditoriaKm( DateTime ultimaAuditoria, String idMotorista) async {
+  // TODO(Remover): Confirmar se ainda e nescessário essa chamada.
+  /*static Future<double> auditoriaKm( DateTime ultimaAuditoria, String idMotorista) async {
     try {
       DateTime dataInicio = DateTime( ultimaAuditoria.year,ultimaAuditoria.month - 1,ultimaAuditoria.day);
       DateTime dataFim = ultimaAuditoria;
@@ -29,5 +22,5 @@ abstract class ApiAuditor {
       print("Erro na API: $e");
       return 0.0;
     }
-  }
+  }*/
 }

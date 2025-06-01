@@ -46,7 +46,7 @@ abstract class ApiJornada {
     }
   }
 
-  static Future<List<Jornada>> buscarJornadasPorMotoristaIdNaoAuditadas(
+  static Future<List<Jornada>> buscarJornadasPorMotoristaId(
       {required DateTime dataInicial,
       required DateTime dataFinal,
       required String motoristaID}) async {
@@ -86,7 +86,7 @@ abstract class ApiJornada {
       if (response.statusCode == 200 || response.statusCode == 201) {
         final Map<String, dynamic> decodedResponse =
             jsonDecode(utf8.decode(response.bodyBytes));
-        return decodedResponse['motoristaID']?.isNotEmpty == true;
+        return decodedResponse['id']?.isNotEmpty == true;
       }
     } catch (e) {
       print("Erro na API: $e");
@@ -112,6 +112,44 @@ abstract class ApiJornada {
     } catch (e) {
       print("Erro na API: $e");
       return [];
+    }
+  }
+
+  static Future<bool> editarJornada(Jornada jornada) async {
+    try {
+      var url = Uri.parse(Configuracao.isPRD
+          ? '${Configuracao.uri_PRD}/Jornada/atualizarJornada'
+          : '${Configuracao.uri_QAS}/Jornada/atualizarJornada');
+
+      var body = jsonEncode({
+        "id": jornada.id,
+        "jornadaData": jornada.jornadaData?.toIso8601String().substring(0, 10),
+        "jornadaLocalidade": jornada.jornadaLocalidade?.toUpperCase(),
+        "motoristaID": jornada.motoristaID,
+        "placa": jornada.placa?.toUpperCase(),
+        "km": jornada.km,
+      });
+
+      var response = await http.post(
+        url,
+        headers: {
+          'accept': 'text/plain',
+          'Content-Type': 'application/json',
+        },
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        print("Jornada atualizada com sucesso!");
+        return true;
+      } else {
+        print(
+            "Erro ao atualizar jornada: ${response.statusCode} - ${response.body}");
+        return false;
+      }
+    } catch (e) {
+      print("Erro na API: $e");
+      return false;
     }
   }
 }

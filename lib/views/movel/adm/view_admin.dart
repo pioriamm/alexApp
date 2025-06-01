@@ -1,16 +1,15 @@
 import 'package:alex/models/motorista.dart';
-import 'package:alex/repository/api_auditor.dart';
 import 'package:alex/repository/api_jornada.dart';
 import 'package:flutter/material.dart';
 
-import '../../../config/mudarDePagina.dart';
 import '../../../controlls/premiacao.dart';
 import '../../../helps/formatadores.dart';
+import '../../../helps/mudarDePagina.dart';
 import '../../../models/jornada.dart';
-import '../../../repository/api_condutor.dart';
+import '../../../repository/api_motorista.dart';
 import '../login.dart';
-import 'cadastrar_condutor.dart';
 import 'cadastrar_jornada.dart';
+import 'cadastrar_motorista.dart';
 
 class ViewAdmin extends StatefulWidget {
   final Motorista motorista;
@@ -38,7 +37,7 @@ class _ViewAdminState extends State<ViewAdmin> {
   }
 
   Future<void> _carregarCondutores() async {
-    final condutores = await ApiCondutor.buscarTodosCondutores();
+    final condutores = await ApiCondutor.buscarTodosMotoristas();
     setState(() {
       _condutores = condutores
         ..sort((a, b) => a.displayName!.compareTo(b.displayName!));
@@ -47,14 +46,13 @@ class _ViewAdminState extends State<ViewAdmin> {
 
   Future<void> carregarJornadas() async {
     try {
-      final motoristaID = widget.motorista.motoristaID!;
-      final jornadas =
-          await ApiJornada.buscarJornadasPorMotoristaIdNaoAuditadas(
-              dataInicial: ultimaApuracao,
-              dataFinal: hoje,
-              motoristaID: motoristaID);
-      final double novoValorKm = await ApiAuditor.auditoriaKm(
-          DateTime(2025, 2, 1), motoristaID.toString());
+      final motoristaID = widget.motorista.Id!;
+      final jornadas = await ApiJornada.buscarJornadasPorMotoristaId(
+          dataInicial: ultimaApuracao,
+          dataFinal: hoje,
+          motoristaID: motoristaID);
+      double novoValorKm =
+          jornadas.fold(0.0, (soma, x) => soma + (x.km ?? 0.0));
 
       setState(() {
         listaJornadas = jornadas;
@@ -124,7 +122,7 @@ class _ViewAdminState extends State<ViewAdmin> {
               child: Icon(Icons.person, size: 40, color: Colors.deepPurple),
             ),
           ),
-          _buildDrawerItem('Cadastrar Condutor', const CadastrarCondutor()),
+          _buildDrawerItem('Cadastrar Motorista', const CadastrarMotorista()),
           _buildDrawerItem('Cadastrar Jornada', const CadastrarJornada()),
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
@@ -160,7 +158,7 @@ class _ViewAdminState extends State<ViewAdmin> {
             isLoading = true;
             _selectedCondutor = value;
           });
-          _carregarJornadas(value.motoristaID!);
+          _carregarJornadas(value.Id!);
         }
       },
       validator: (value) => value == null ? 'Selecione um condutor' : null,

@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../../../models/motorista.dart';
-import '../../../repository/api_condutor.dart';
+import '../../../repository/api_motorista.dart';
 
 class CadastrarJornada extends StatefulWidget {
   const CadastrarJornada({super.key});
@@ -21,7 +21,7 @@ class _CadastrarJornadaState extends State<CadastrarJornada> {
   final _dataController = TextEditingController();
   final _placaController = TextEditingController();
   final _kmController = TextEditingController();
-  final _horasController = TextEditingController();
+  final _localidadeJornada = TextEditingController();
 
   final _placaMaskFormatter = MaskTextInputFormatter(
     mask: 'AAA9A99',
@@ -35,7 +35,7 @@ class _CadastrarJornadaState extends State<CadastrarJornada> {
   }
 
   Future<void> _carregarCondutores() async {
-    final condutores = await ApiCondutor.buscarTodosCondutores();
+    final condutores = await ApiCondutor.buscarTodosMotoristas();
     setState(() {
       _condutores = condutores
         ..sort((a, b) => a.displayName!.compareTo(b.displayName!));
@@ -54,25 +54,14 @@ class _CadastrarJornadaState extends State<CadastrarJornada> {
     }
   }
 
-  Future<void> _selectTime(BuildContext context) async {
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-    if (picked != null) {
-      _horasController.text =
-          '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
-    }
-  }
-
   void _salvarJornada() {
     if (_formKey.currentState!.validate()) {
       final jornadaData = {
         "jornadaData": _dataController.text,
-        "jornadaHora": "1990-01-01T${_horasController.text}:00.000Z",
-        "motoristaID": _selectedCondutor?.motoristaID,
+        "jornadaLocalidade": _localidadeJornada.text,
+        "motoristaID": _selectedCondutor?.Id,
         "placa": _placaController.text.toUpperCase(),
-        "km": double.tryParse(_kmController.text),
+        "km": double.tryParse(_kmController.text)
       };
 
       ApiJornada.cadastrarNovaJornada(jornadaData).then((sucesso) {
@@ -95,7 +84,7 @@ class _CadastrarJornadaState extends State<CadastrarJornada> {
 
   void _limparCampos() {
     _dataController.clear();
-    _horasController.clear();
+    _localidadeJornada.clear();
     _kmController.clear();
     _placaController.clear();
     setState(() {
@@ -149,18 +138,23 @@ class _CadastrarJornadaState extends State<CadastrarJornada> {
                 children: [
                   Flexible(child: _buildDateField()),
                   const SizedBox(width: 12),
-                  Flexible(child: _buildTimeField()),
+                  Flexible(child: _buildLocalidadeJornada()),
                 ],
               ),
               const SizedBox(height: 12),
-              _buildPlacaField(),
-              const SizedBox(height: 12),
-              _buildKmField(),
+              Row(
+                children: [
+                  Flexible(child: _buildPlacaField()),
+                  const SizedBox(width: 12),
+                  Flexible(child: _buildKmField()),
+                ],
+              ),
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: 'btncadastrarJornada',
         onPressed: _salvarJornada,
         label: const Text(
           'Salvar Jornada',
@@ -210,22 +204,6 @@ class _CadastrarJornadaState extends State<CadastrarJornada> {
     );
   }
 
-  Widget _buildTimeField() {
-    return TextFormField(
-      controller: _horasController,
-      readOnly: true,
-      decoration: _inputDecoration(
-        'Horas de Jornada',
-        suffixIcon: IconButton(
-          icon: const Icon(Icons.access_time),
-          onPressed: () => _selectTime(context),
-        ),
-      ),
-      onTap: () => _selectTime(context),
-      validator: (value) => value!.isEmpty ? 'Informe a hora' : null,
-    );
-  }
-
   Widget _buildPlacaField() {
     return TextFormField(
       controller: _placaController,
@@ -243,6 +221,16 @@ class _CadastrarJornadaState extends State<CadastrarJornada> {
       decoration: _inputDecoration('1.0 (KM)'),
       keyboardType: TextInputType.number,
       validator: (value) => value!.isEmpty ? 'Informe a quilometragem' : null,
+    );
+  }
+
+  Widget _buildLocalidadeJornada() {
+    return TextFormField(
+      controller: _localidadeJornada,
+      decoration: _inputDecoration('Origem X Destino'),
+      keyboardType: TextInputType.webSearch,
+      validator: (value) =>
+          value!.isEmpty ? 'Informe a Origem X Destino' : null,
     );
   }
 }
