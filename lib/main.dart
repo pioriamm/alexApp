@@ -1,5 +1,5 @@
-import 'package:alex/views/movel/login.dart';
-import 'package:alex/views/web/web_login.dart';
+import 'package:alex/views/plataformas/movel/mobilie_login.dart';
+import 'package:alex/views/plataformas/web/web_login.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: kIsWeb ? const WebLogin() : Login(),
+      home: kIsWeb ? const WebLogin() : MobileLogin(),
     );
   }
 }

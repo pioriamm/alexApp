@@ -4,9 +4,15 @@ class Motorista {
   String? displayName;
   String? Id;
   bool? isAdim;
+  String? celularId;
 
   Motorista(
-      {this.login, this.telefone, this.displayName, this.isAdim, this.Id});
+      {this.login,
+      this.telefone,
+      this.displayName,
+      this.isAdim,
+      this.Id,
+      this.celularId});
 
   Motorista.fromJson(Map<String, dynamic> json) {
     login = json['login'];
@@ -14,6 +20,7 @@ class Motorista {
     displayName = json['displayName'];
     Id = json['id'];
     isAdim = json['isAdim'];
+    celularId = json['celularId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -22,6 +29,7 @@ class Motorista {
     data['displayName'] = this.displayName;
     data['id'] = this.Id;
     data['isAdim'] = this.isAdim;
+    data['celularId'] = this.celularId;
     return data;
   }
 }

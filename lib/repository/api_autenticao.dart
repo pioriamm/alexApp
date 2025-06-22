@@ -5,12 +5,17 @@ import 'package:alex/models/motorista.dart';
 import 'package:http/http.dart' as http;
 
 abstract class ApiAutenticao {
-  static Future<Motorista?> logarUsuario(String login, String senha) async {
+  static Future<Motorista?> logarUsuario(
+      String login, String senha, String idCelular) async {
     try {
       var url = Uri.parse(Configuracao.isPRD
               ? '${Configuracao.uri_PRD}/Auth/credenciais'
               : '${Configuracao.uri_QAS}/Auth/credenciais')
-          .replace(queryParameters: {'login': login, 'senha': senha});
+          .replace(queryParameters: {
+        'login': login,
+        'senha': senha,
+        'idCelular': idCelular
+      });
 
       var response = await http.get(url);
 

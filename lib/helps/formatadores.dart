@@ -27,4 +27,14 @@ class Formatador {
 
     return telefone;
   }
+
+  static String gerarIniciais(String nome) {
+    final partes = nome.trim().split(' ');
+
+    if (partes.isEmpty) return '';
+    final primeira = partes[0].isNotEmpty ? partes[0][0] : '';
+    final segunda =
+        partes.length > 1 && partes[1].isNotEmpty ? partes[1][0] : '';
+    return (primeira + segunda).toUpperCase();
+  }
 }

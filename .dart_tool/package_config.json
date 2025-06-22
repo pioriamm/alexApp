@@ -68,6 +68,18 @@
       "languageVersion": "3.1"
     },
     {
+      "name": "device_info_plus",
+      "rootUri": "file:///C:/Users/Marcelo/AppData/Local/Pub/Cache/hosted/pub.dev/device_info_plus-11.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "device_info_plus_platform_interface",
+      "rootUri": "file:///C:/Users/Marcelo/AppData/Local/Pub/Cache/hosted/pub.dev/device_info_plus_platform_interface-7.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "fake_async",
       "rootUri": "file:///C:/Users/Marcelo/AppData/Local/Pub/Cache/hosted/pub.dev/fake_async-1.3.2",
       "packageUri": "lib/",
@@ -78,6 +90,12 @@
       "rootUri": "file:///C:/Users/Marcelo/AppData/Local/Pub/Cache/hosted/pub.dev/ffi-2.1.4",
       "packageUri": "lib/",
       "languageVersion": "3.7"
+    },
+    {
+      "name": "file",
+      "rootUri": "file:///C:/Users/Marcelo/AppData/Local/Pub/Cache/hosted/pub.dev/file-7.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "flutter",
@@ -100,6 +118,12 @@
     {
       "name": "flutter_test",
       "rootUri": "file:///C:/src/flutter/packages/flutter_test",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "flutter_web_plugins",
+      "rootUri": "file:///C:/src/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.7"
     },
@@ -182,6 +206,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "package_info_plus",
+      "rootUri": "file:///C:/Users/Marcelo/AppData/Local/Pub/Cache/hosted/pub.dev/package_info_plus-8.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "package_info_plus_platform_interface",
+      "rootUri": "file:///C:/Users/Marcelo/AppData/Local/Pub/Cache/hosted/pub.dev/package_info_plus_platform_interface-3.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "path",
       "rootUri": "file:///C:/Users/Marcelo/AppData/Local/Pub/Cache/hosted/pub.dev/path-1.9.1",
       "packageUri": "lib/",
@@ -192,6 +228,12 @@
       "rootUri": "file:///C:/Users/Marcelo/AppData/Local/Pub/Cache/hosted/pub.dev/petitparser-6.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.5"
+    },
+    {
+      "name": "plugin_platform_interface",
+      "rootUri": "file:///C:/Users/Marcelo/AppData/Local/Pub/Cache/hosted/pub.dev/plugin_platform_interface-2.1.8",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "posix",
@@ -266,6 +308,18 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "win32",
+      "rootUri": "file:///C:/Users/Marcelo/AppData/Local/Pub/Cache/hosted/pub.dev/win32-5.13.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
+      "name": "win32_registry",
+      "rootUri": "file:///C:/Users/Marcelo/AppData/Local/Pub/Cache/hosted/pub.dev/win32_registry-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.7"
+    },
+    {
       "name": "xml",
       "rootUri": "file:///C:/Users/Marcelo/AppData/Local/Pub/Cache/hosted/pub.dev/xml-6.5.0",
       "packageUri": "lib/",
@@ -284,7 +338,7 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2025-04-29T23:02:10.982353Z",
+  "generated": "2025-06-08T16:35:28.586507Z",
   "generator": "pub",
   "generatorVersion": "3.7.2",
   "flutterRoot": "file:///C:/src/flutter",
