@@ -9,15 +9,21 @@ import '../telas/cadastrar_motorista.dart';
 import '../telas/casdastrar_checklist.dart';
 import 'menu_opcoes.dart';
 
-class SidebarMenu extends StatelessWidget {
+class SidebarMenu extends StatefulWidget {
   final Motorista motorista;
 
   const SidebarMenu({super.key, required this.motorista});
 
   @override
+  State<SidebarMenu> createState() => _SidebarMenuState();
+}
+
+class _SidebarMenuState extends State<SidebarMenu> {
+  @override
   Widget build(BuildContext context) {
+    var m = widget.motorista;
     return Container(
-      width: 260, // define uma largura fixa para o menu lateral
+      width: 260,
       color: Colors.white,
       child: ListView(
         padding: const EdgeInsets.all(24),
@@ -27,7 +33,7 @@ class SidebarMenu extends StatelessWidget {
           CircleAvatar(
             radius: 48,
             child: Text(
-              Formatador.gerarIniciais(motorista.displayName ?? ''),
+              Formatador.gerarIniciais(widget.motorista.displayName ?? ''),
               style: const TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
@@ -39,36 +45,33 @@ class SidebarMenu extends StatelessWidget {
 
           // Nome e telefone
           Text(
-            motorista.displayName ?? '-',
+            widget.motorista.displayName ?? '-',
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(
-            motorista.telefone != null
-                ? Formatador.formatarTelefone(motorista.telefone!)
+            widget.motorista.telefone != null
+                ? Formatador.formatarTelefone(widget.motorista.telefone!)
                 : '-',
           ),
 
-          const SizedBox(height: 8),
-
-          // Icone de Admin
-          Icon(
-            Icons.safety_check_rounded,
-            color: motorista.isAdim! ? Colors.green : Colors.yellow,
-          ),
-
           const SizedBox(height: 24),
-          // Opções de Menu
-          if (motorista.isAdim! == true &&
-              !motorista.login!.contains('adm')) ...[
+
+          if (widget.motorista.perfilAcesso! == 1) ...[
             const MenuOpcoes(
                 titulo: 'Cadastrar Motorista', page: CadastrarMotorista()),
             const MenuOpcoes(
                 titulo: 'Cadastrar Jornada', page: CadastrarJornada()),
-            const MenuOpcoes(
-                titulo: 'Cadastrar Checklist', page: CadastrarChecklist()),
+            MenuOpcoes(
+                titulo: 'Cadastrar Checklist',
+                page: ChecklistPage(
+                  motorista: widget.motorista,
+                )),
           ] else ...[
-            const MenuOpcoes(
-                titulo: 'Cadastrar Checklist', page: CadastrarChecklist()),
+            MenuOpcoes(
+                titulo: 'Cadastrar Checklist',
+                page: ChecklistPage(
+                  motorista: widget.motorista,
+                )),
           ],
 
           const SizedBox(height: 100),

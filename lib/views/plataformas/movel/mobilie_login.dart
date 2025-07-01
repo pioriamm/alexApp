@@ -196,12 +196,12 @@ class _MobileLoginState extends State<MobileLogin> {
 
     if (motorista != null) {
       if (kIsWeb) {
-        (motorista.isAdim! == true && motorista.celularId! == 'BP22.250325.006')
+        (motorista.perfilAcesso! == 1 || motorista.perfilAcesso! == 3)
             ? MudarDePagina.logIn(
                 context, AdminDashboardPage(motorista: motorista))
             : _messengerKey.currentState?.showSnackBar(
                 SnackBar(
-                  backgroundColor: const Color(0xFF2E1E82),
+                  backgroundColor: Constantes.roxo,
                   content: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: const Text(
@@ -213,7 +213,7 @@ class _MobileLoginState extends State<MobileLogin> {
                 ),
               );
       } else {
-        motorista.isAdim!
+        motorista.perfilAcesso == 1
             ? MudarDePagina.logIn(context, ViewAdmin(motorista: motorista))
             : MudarDePagina.logIn(
                 context, TelaDashMotorista(motorista: motorista));

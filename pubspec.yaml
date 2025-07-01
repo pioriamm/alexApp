@@ -3,7 +3,7 @@ description: "Aplicao para gerenciar horas de caminhoneiros"
 
 publish_to: 'br.com.pioriam'
 
-version: 2.1.0+2
+version: 2.1.2+2
 
 environment:
   sdk: ^3.5.3

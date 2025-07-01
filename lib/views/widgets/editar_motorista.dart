@@ -18,8 +18,9 @@ class _EditarMotoristaState extends State<EditarMotorista> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _loginController = TextEditingController();
-  late bool _isAdminController;
+  late int _perfilAcessoController;
   late final String idMotorista;
+  String _perfilSelecionado = '1';
 
   final MaskTextInputFormatter _phoneFormatter = MaskTextInputFormatter(
     mask: '+55 0## #####-####',
@@ -31,7 +32,7 @@ class _EditarMotoristaState extends State<EditarMotorista> {
     _nameController.text = widget.motorista.displayName ?? '';
     _phoneController.text = widget.motorista.telefone ?? '';
     _loginController.text = widget.motorista.login ?? '';
-    _isAdminController = widget.motorista.isAdim ?? false;
+    _perfilAcessoController = widget.motorista.perfilAcesso ?? 2;
     idMotorista = widget.motorista.Id!;
 
     super.initState();
@@ -56,7 +57,7 @@ class _EditarMotoristaState extends State<EditarMotorista> {
       final name = _nameController.text.trim();
       final phone = _phoneController.text.trim();
       final login = _loginController.text.trim();
-      final isAdmin = _isAdminController;
+      final isAdmin = _perfilAcessoController;
 
       Motorista motorista = Motorista(
         Id: idMotorista,
@@ -65,7 +66,7 @@ class _EditarMotoristaState extends State<EditarMotorista> {
           RegExp(r'\D'),
           '',
         ),
-        isAdim: isAdmin,
+        perfilAcesso: isAdmin,
       );
 
       final sucesso = await ApiCondutor.editarMotorista(motorista: motorista);
@@ -149,17 +150,30 @@ class _EditarMotoristaState extends State<EditarMotorista> {
               const SizedBox(height: 20),
               Row(
                 children: [
-                  Text('Administrador'),
-                  SizedBox(width: 8),
-                  Switch(
-                    activeColor: Colors.deepPurple,
-                    value: _isAdminController,
-                    onChanged: (bool novoValor) {
+                  const Text('Perfim de Acesso'),
+                  const SizedBox(width: 8),
+                  DropdownButton<String>(
+                    value: _perfilSelecionado,
+                    items: const [
+                      DropdownMenuItem(
+                        value: '1',
+                        child: Text('Administrador'),
+                      ),
+                      DropdownMenuItem(
+                        value: '2',
+                        child: Text('Motorista'),
+                      ),
+                      DropdownMenuItem(
+                        value: '3',
+                        child: Text('Administrativo'),
+                      ),
+                    ],
+                    onChanged: (String? novoValor) {
                       setState(() {
-                        _isAdminController = novoValor;
+                        _perfilSelecionado = novoValor!;
                       });
                     },
-                  ),
+                  )
                 ],
               ),
               const SizedBox(height: 30),

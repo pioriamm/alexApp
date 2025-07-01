@@ -3,14 +3,14 @@ class Motorista {
   String? telefone;
   String? displayName;
   String? Id;
-  bool? isAdim;
+  int? perfilAcesso;
   String? celularId;
 
   Motorista(
       {this.login,
       this.telefone,
       this.displayName,
-      this.isAdim,
+      this.perfilAcesso,
       this.Id,
       this.celularId});
 
@@ -19,7 +19,7 @@ class Motorista {
     telefone = json['telefone'];
     displayName = json['displayName'];
     Id = json['id'];
-    isAdim = json['isAdim'];
+    perfilAcesso = json['perfilAcesso'];
     celularId = json['celularId'];
   }
 
@@ -28,7 +28,7 @@ class Motorista {
     data['telefone'] = this.telefone;
     data['displayName'] = this.displayName;
     data['id'] = this.Id;
-    data['isAdim'] = this.isAdim;
+    data['perfilAcesso'] = this.perfilAcesso;
     data['celularId'] = this.celularId;
     return data;
   }

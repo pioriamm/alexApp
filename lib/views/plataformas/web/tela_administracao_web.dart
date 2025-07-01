@@ -84,8 +84,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 HeaderWidget(),
-                (widget.motorista.isAdim! == true &&
-                        !widget.motorista.login!.contains('adm'))
+                (widget.motorista.perfilAcesso! == 1)
                     ? Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
